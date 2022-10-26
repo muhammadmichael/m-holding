@@ -37,5 +37,11 @@ func main() {
 		})
 	})
 
+	app.Get("/revenue", func(c *fiber.Ctx) error {
+		return c.Render("revenue", fiber.Map{
+			"Title": "Add Revenue",
+		})
+	})
+
 	app.Listen(":3000")
 }
