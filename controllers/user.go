@@ -3,9 +3,11 @@ package controllers
 import (
 	"rapid/m-holding/database"
 	"rapid/m-holding/models"
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -18,19 +20,82 @@ type LoginForm struct {
 
 type UserController struct {
 	// Declare variables
-	Db *gorm.DB
+	Db    *gorm.DB
+	store *session.Store
 }
 
-func InitUserController() *UserController {
+func InitUserController(s *session.Store) *UserController {
 	db := database.InitDb()
 	// gorm sync
 	db.AutoMigrate(&models.User{})
 
-	return &UserController{Db: db}
+	return &UserController{Db: db, store: s}
+}
+
+// GET FORM REGISTRASI
+func (controller *UserController) Register(c *fiber.Ctx) error {
+	return c.Render("registrasi", fiber.Map{
+		"Title": "Register User",
+	})
+}
+
+// POST TO REGISTRASI
+func (controller *UserController) NewRegister(c *fiber.Ctx) error {
+	var registrasi models.User
+
+	if err := c.BodyParser(&registrasi); err != nil {
+		return c.Redirect("/registrasi")
+	}
+	// save registrasi
+	err := models.Registrasi(controller.Db, &registrasi)
+	if err != nil {
+		return c.Redirect("/registrasi")
+	}
+	// if succeed
+	return c.Redirect("/login")
+}
+
+// GET FORM LOGIN /login
+func (controller *UserController) Login(c *fiber.Ctx) error {
+	return c.Render("login", fiber.Map{
+		"Title": "Login",
+	})
 }
 
 // POST /login
 func (controller *UserController) LoginPosted(c *fiber.Ctx) error {
+	sess, err := controller.store.Get(c)
+	if err != nil {
+		panic(err)
+	}
+	var user models.User
+	var myform LoginForm
+
+	if err := c.BodyParser(&myform); err != nil {
+		return c.Redirect("/login")
+	}
+
+	// Find user
+	errs := models.FindUserByUsername(controller.Db, &user, myform.Username)
+	if errs != nil {
+		return c.Redirect("/login") // Unsuccessful login (cannot find user)
+	}
+
+	// Compare password
+	compare := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(myform.Password))
+	if compare == nil { // compare == nil artinya hasil compare di atas true
+		sess.Set("username", user.Username)
+		sess.Set("userId", user.ID)
+		sess.Save()
+
+		return c.Redirect("/")
+	}
+
+	return c.Redirect("/login")
+}
+
+// POST /api/login
+func (controller *UserController) ApiLoginPosted(c *fiber.Ctx) error {
 	var user models.User
 	var myform LoginForm
 
@@ -91,31 +156,39 @@ func (controller *UserController) LoginPosted(c *fiber.Ctx) error {
 	})
 }
 
-// GET FORM REGISTRASI
-func (controller *UserController) Register(c *fiber.Ctx) error {
-	return c.Render("registrasi", fiber.Map{
-		"Title": "Register User",
+// GET /profile/:id
+func (controller *UserController) ViewProfile(c *fiber.Ctx) error {
+	params := c.AllParams() // "{"id": "1"}"
+
+	intId, _ := strconv.Atoi(params["id"])
+
+	var user models.User
+	err := models.FindUserById(controller.Db, &user, intId)
+	if err != nil {
+		return c.SendStatus(500) // http 500 internal server error
+	}
+
+	sess, err := controller.store.Get(c)
+	if err != nil {
+		panic(err)
+	}
+	val := sess.Get("userId")
+
+	return c.Render("profile", fiber.Map{
+		"Title":  "Profile",
+		"User":   user,
+		"UserId": val,
 	})
 }
 
-// POST TO REGISTRASI
-func (controller *UserController) NewRegister(c *fiber.Ctx) error {
-	//myform := new(models.Product)
-	var registrasi models.User
+// /logout
+func (controller *UserController) Logout(c *fiber.Ctx) error {
 
-	if err := c.BodyParser(&registrasi); err != nil {
-		return c.Redirect("/registrasi")
-	}
-	// save registrasi
-	err := models.Registrasi(controller.Db, &registrasi)
+	sess, err := controller.store.Get(c)
 	if err != nil {
-		return c.Redirect("/registrasi")
+		panic(err)
 	}
-	// if succeed
-	return c.Redirect("/login")
-}
-
-func (controller *UserController) Login(c *fiber.Ctx) error {
+	sess.Destroy()
 	return c.Render("login", fiber.Map{
 		"Title": "Login",
 	})

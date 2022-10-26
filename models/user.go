@@ -40,3 +40,11 @@ func FindUserByUsername(db *gorm.DB, user *User, username string) (err error) {
 	}
 	return nil
 }
+
+func FindUserById(db *gorm.DB, user *User, id int) (err error) {
+	err = db.Where("id=?", id).First(user).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
