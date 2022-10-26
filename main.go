@@ -54,7 +54,11 @@ func main() {
 	app.Get("/login", userController.Login)
 	app.Get("/logout", userController.Logout)
 	app.Post("/login", userController.LoginPosted)
-	app.Get("/profile/:id", userController.ViewProfile)
+
+	profile := app.Group("/profile")
+	profile.Get("/:id", userController.ViewProfile)
+	profile.Get("/edit/:id", userController.EditProfile)
+	profile.Post("/edit/:id", userController.EditProfilePosted)
 
 	// API Routes
 	api := app.Group("/api")

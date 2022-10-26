@@ -9,6 +9,7 @@ import (
 
 type User struct {
 	gorm.Model
+	Id       int    `form:"id" json: "id" validate:"required"`
 	Name     string `form:"name" json: "name" validate:"required"`
 	Username string `form:"username" json: "username" validate:"required"`
 	Image    string `form:"image" json: "image" validate:"required"`
@@ -46,5 +47,11 @@ func FindUserById(db *gorm.DB, user *User, id int) (err error) {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func UpdateUser(db *gorm.DB, user *User) (err error) {
+	db.Save(user)
+
 	return nil
 }

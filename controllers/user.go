@@ -181,6 +181,65 @@ func (controller *UserController) ViewProfile(c *fiber.Ctx) error {
 	})
 }
 
+// GET /profile/edit/:id
+func (controller *UserController) EditProfile(c *fiber.Ctx) error {
+	params := c.AllParams() // "{"id": "1"}"
+
+	intId, _ := strconv.Atoi(params["id"])
+
+	var user models.User
+	err := models.FindUserById(controller.Db, &user, intId)
+	if err != nil {
+		return c.SendStatus(500) // http 500 internal server error
+	}
+
+	sess, err := controller.store.Get(c)
+	if err != nil {
+		panic(err)
+	}
+	val := sess.Get("userId")
+
+	return c.Render("editprofile", fiber.Map{
+		"Title":  "Edit Profile",
+		"User":   user,
+		"UserId": val,
+	})
+}
+
+// POST /profile/edit/:id
+func (controller *UserController) EditProfilePosted(c *fiber.Ctx) error {
+	var user models.User
+	var userEditForm models.User
+
+	params := c.AllParams() // "{"id": "1"}"
+	intId, _ := strconv.Atoi(params["id"])
+	user.Id = intId
+
+	if err := c.BodyParser(&userEditForm); err != nil {
+		return c.Redirect("/profile/edit/" + params["id"])
+	}
+
+	// Find the user
+	err := models.FindUserById(controller.Db, &user, intId)
+	if err != nil {
+		return c.SendStatus(500) // http 500 internal server error
+	}
+
+	// Change from user's input
+	user.Name = userEditForm.Name
+	user.Email = userEditForm.Email
+	user.Role = userEditForm.Role
+
+	// save product
+	errs := models.UpdateUser(controller.Db, &user)
+	if errs != nil {
+		return c.Redirect("/profile/edit/" + params["id"])
+	}
+
+	// if succeed
+	return c.Redirect("/profile/" + params["id"])
+}
+
 // /logout
 func (controller *UserController) Logout(c *fiber.Ctx) error {
 
