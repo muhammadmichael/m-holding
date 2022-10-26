@@ -12,6 +12,8 @@ type User struct {
 	Email    string `form:"email" json: "email" validate:"required"`
 	Role     string `form:"role" json: "role" validate:"required"`
 	Password string `form:"password" json: "password" validate:"required"`
+	//default false (Active)
+	Disable  bool `gorm:"default:0"`
 	TenantID uint
 }
 
