@@ -12,6 +12,8 @@ type User struct {
 	Email    string `form:"email" json: "email" validate:"required"`
 	Role     string `form:"role" json: "role" validate:"required"`
 	Password string `form:"password" json: "password" validate:"required"`
+	//default false (Active)
+	Disable  bool `gorm:"default:0"`
 	TenantID uint
 }
 
@@ -25,6 +27,16 @@ func CreateUser(db *gorm.DB, newUser *User) (err error) {
 
 func FindUserByUsername(db *gorm.DB, user *User, username string) (err error) {
 	err = db.Where("username=?", username).First(user).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// update user data with username
+func UpdateUserByUsername(db *gorm.DB, user *User, username string) (err error) {
+	db.Where("username=?", username).First(&user)
+	err = db.Save(user).Error
 	if err != nil {
 		return err
 	}
