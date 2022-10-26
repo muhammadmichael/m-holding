@@ -31,6 +31,14 @@ func main() {
 	fmt.Println(userController)
 	fmt.Println(tenantController)
 
+	user := app.Group("/register")
+	user.Get("/", userController.Register)
+	user.Post("/tambah", userController.NewRegister)
+
+	login := app.Group("/login")
+	login.Get("/", userController.Login)
+	//login.Post("/sigIn", userController.LoginUser)
+
 	app.Get("/hello", func(c *fiber.Ctx) error {
 		return c.Render("home", fiber.Map{
 			"Title": "M-Holding",

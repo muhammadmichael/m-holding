@@ -1,6 +1,9 @@
 package models
 
 import (
+	"fmt"
+
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -17,7 +20,12 @@ type User struct {
 	TenantID uint
 }
 
-func CreateUser(db *gorm.DB, newUser *User) (err error) {
+func Registrasi(db *gorm.DB, newUser *User) (err error) {
+	plainPassword := newUser.Password
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(plainPassword), 10)
+	sHash := string(bytes)
+	fmt.Println("Hash password: ", sHash)
+	newUser.Password = sHash
 	err = db.Create(newUser).Error
 	if err != nil {
 		return err

@@ -90,3 +90,33 @@ func (controller *UserController) LoginPosted(c *fiber.Ctx) error {
 		"message": "Unauthorized",
 	})
 }
+
+// GET FORM REGISTRASI
+func (controller *UserController) Register(c *fiber.Ctx) error {
+	return c.Render("registrasi", fiber.Map{
+		"Title": "Register User",
+	})
+}
+
+// POST TO REGISTRASI
+func (controller *UserController) NewRegister(c *fiber.Ctx) error {
+	//myform := new(models.Product)
+	var registrasi models.User
+
+	if err := c.BodyParser(&registrasi); err != nil {
+		return c.Redirect("/registrasi")
+	}
+	// save registrasi
+	err := models.Registrasi(controller.Db, &registrasi)
+	if err != nil {
+		return c.Redirect("/registrasi")
+	}
+	// if succeed
+	return c.Redirect("/login")
+}
+
+func (controller *UserController) Login(c *fiber.Ctx) error {
+	return c.Render("login", fiber.Map{
+		"Title": "Login",
+	})
+}
