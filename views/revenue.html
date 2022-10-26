@@ -1,3 +1,31 @@
 {{template "partials/header" .}}
-<h1>Selamat Datang di {{.Title}} App</h1>
+<div class="bg-light my-5 border border-primary rounded">
+    <h1 class="p-3">{{.Title}}</h1>
+
+    <div class="d-flex flex-column p-3">
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Id Iklan</th>
+                <th scope="col">Nama Iklan</th>
+                <th scope="col">Viewers</th>
+                <th scope="col">Revenue</th>
+              </tr>
+            </thead>
+            <tbody>
+                {{range .Products}}
+                <tr>
+                    <th scope="row">{{.Id}}</th>
+                    <td>{{.Name}}</td>
+                    <td>{{.Viewer}} Views</td>
+                    <td>$ {{.Revenue}}</td>
+                </tr>
+              {{end}}
+              
+            </tbody>
+          </table>     
+    </div>
+</div>
+
+
 {{template "partials/footer" .}}

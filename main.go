@@ -8,6 +8,13 @@ import (
 	"github.com/gofiber/template/html"
 )
 
+type Product struct {
+	Id      int
+	Name    string
+	Viewer  int
+	Revenue float32
+}
+
 func main() {
 	// session
 	// store := session.New()
@@ -38,8 +45,17 @@ func main() {
 	})
 
 	app.Get("/revenue", func(c *fiber.Ctx) error {
+		var products = []*Product{
+			{Id: 1, Name: "Iklan 1", Viewer: 10, Revenue: 1},
+			{Id: 2, Name: "Iklan 2", Viewer: 20, Revenue: 2},
+			{Id: 3, Name: "Iklan 3", Viewer: 30, Revenue: 3},
+			{Id: 4, Name: "Iklan 4", Viewer: 40, Revenue: 4},
+			{Id: 5, Name: "Iklan 5", Viewer: 50, Revenue: 5},
+		}
+
 		return c.Render("revenue", fiber.Map{
-			"Title": "Add Revenue",
+			"Title":    "Detail Revenue",
+			"Products": products,
 		})
 	})
 
