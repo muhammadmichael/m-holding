@@ -39,7 +39,6 @@ func main() {
 
 	// Auth Routes (Register and Login)
 	app.Post("/login", userController.LoginPosted)
-	app.Post("/register", userController.AddRegisteredUser)
 
 	app.Listen(":3000")
 }

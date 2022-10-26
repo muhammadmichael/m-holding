@@ -16,13 +16,6 @@ type LoginForm struct {
 	Password string `form:"password" json:"password" validate:"required"`
 }
 
-type RegistrationForm struct {
-	Username string `form:"username" json:"username" validate:"required"`
-	Password string `form:"password" json:"password" validate:"required"`
-	Name     string `form:"name" json:"name" validate:"required"`
-	Email    string `form:"email" json:"email" validate:"required"`
-}
-
 type UserController struct {
 	// Declare variables
 	Db *gorm.DB
@@ -96,61 +89,4 @@ func (controller *UserController) LoginPosted(c *fiber.Ctx) error {
 		"status":  401,
 		"message": "Unauthorized",
 	})
-}
-
-func (controller *UserController) AddRegisteredUser(c *fiber.Ctx) error {
-	var myform RegistrationForm
-	var user models.User
-
-	if err := c.BodyParser(&myform); err != nil {
-		// Bad Request, RegisterForm is not complete
-		return c.JSON(fiber.Map{
-			"status":  400,
-			"message": "Bad Request, Registration Form is not complete",
-		})
-	}
-
-	errChecker := checker.Struct(myform)
-	if errChecker != nil {
-		return c.JSON(fiber.Map{
-			"status":  400,
-			"message": "Bad Request, Registration Form is not complete",
-		})
-	}
-
-	// Cek apakah username sudah digunakan
-	errUsername := models.FindUserByUsername(controller.Db, &user, myform.Username)
-	if errUsername != gorm.ErrRecordNotFound {
-		return c.JSON(fiber.Map{
-			"message": "Username telah digunakan",
-		})
-	}
-
-	// Hash password
-	bytes, _ := bcrypt.GenerateFromPassword([]byte(myform.Password), 10)
-	sHash := string(bytes)
-
-	// Simpan hashing, bukan plain passwordnya
-	user.Password = sHash
-
-	// Simpan nama dan username dari form
-	user.Username = myform.Username
-	user.Name = myform.Name
-	user.Email = myform.Email
-
-	// save user
-	err := models.CreateUser(controller.Db, &user)
-	if err != nil {
-		// Server error, gagal menyimpan user
-		return c.JSON(fiber.Map{
-			"status":  500,
-			"message": "Server error, gagal menyimpan user",
-		})
-	}
-
-	// if succeed
-	return c.JSON(fiber.Map{
-		"message": "User telah berhasil dibuat",
-	})
-
 }
