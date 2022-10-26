@@ -266,7 +266,7 @@ func (u *UserController) UpdateProfilePictureUser(id uint, image string) (err er
 	return nil
 }
 
-// update user profile picture with username
+// update user data & profile picture with username
 func (controller *UserController) UpdateUserImage(c *fiber.Ctx) error {
 	var user models.User
 
@@ -313,6 +313,16 @@ func (controller *UserController) UpdateUserImage(c *fiber.Ctx) error {
 func (u *UserController) DisableUser(id uint) (err error) {
 
 	err = u.Db.Model(&models.User{}).Where("id=?", id).Update("disable", true).Error //update disable
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// enable user
+func (u *UserController) EnableUser(id uint) (err error) {
+
+	err = u.Db.Model(&models.User{}).Where("id=?", id).Update("disable", false).Error //update disable
 	if err != nil {
 		return err
 	}
