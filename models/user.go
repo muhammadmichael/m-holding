@@ -8,6 +8,7 @@ type User struct {
 	gorm.Model
 	Name     string `form:"name" json: "name" validate:"required"`
 	Username string `form:"username" json: "username" validate:"required"`
+	Image    string `form:"image" json: "image" validate:"required"`
 	Email    string `form:"email" json: "email" validate:"required"`
 	Role     string `form:"role" json: "role" validate:"required"`
 	Password string `form:"password" json: "password" validate:"required"`
