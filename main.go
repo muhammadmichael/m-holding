@@ -44,13 +44,19 @@ func main() {
 		})
 	})
 
+	app.Get("/test", func(c *fiber.Ctx) error {
+		return c.Render("test", fiber.Map{
+			"Title": "Revenue",
+		})
+	})
+
 	app.Get("/revenue", func(c *fiber.Ctx) error {
 		var products = []*Product{
-			{Id: 1, Name: "Iklan 1", Viewer: 10, Revenue: 1},
-			{Id: 2, Name: "Iklan 2", Viewer: 20, Revenue: 2},
-			{Id: 3, Name: "Iklan 3", Viewer: 30, Revenue: 3},
-			{Id: 4, Name: "Iklan 4", Viewer: 40, Revenue: 4},
-			{Id: 5, Name: "Iklan 5", Viewer: 50, Revenue: 5},
+			{Id: 1, Name: "Iklan 1", Viewer: 10, Revenue: 20},
+			{Id: 2, Name: "Iklan 2", Viewer: 20, Revenue: 40},
+			{Id: 3, Name: "Iklan 3", Viewer: 30, Revenue: 60},
+			{Id: 4, Name: "Iklan 4", Viewer: 40, Revenue: 80},
+			{Id: 5, Name: "Iklan 5", Viewer: 50, Revenue: 100},
 		}
 
 		return c.Render("revenue", fiber.Map{
