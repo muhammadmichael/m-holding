@@ -134,4 +134,6 @@ func (controller *TenantController) DetailTenant2(c *fiber.Ctx)error{
 	// 	"message": "Detail tenant dengan name " + name,
 	// 	"Tenant": tenant,
 	// })
+
+	//cek git
 }
