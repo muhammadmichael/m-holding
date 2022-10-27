@@ -367,7 +367,7 @@ func (u *UserController) DisableTheUser(c *fiber.Ctx) (err error) {
 	if err != nil {
 		return err
 	}
-	return c.Redirect("/user")
+	return c.Redirect("/login")
 }
 
 // enable user
@@ -377,5 +377,5 @@ func (u *UserController) EnableTheUser(c *fiber.Ctx) (err error) {
 	if err != nil {
 		return err
 	}
-	return c.Redirect("/user")
+	return c.Redirect("/login")
 }
