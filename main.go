@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"rapid/m-holding/api"
 	"rapid/m-holding/controllers"
 
 	"github.com/gofiber/fiber/v2"
@@ -37,11 +38,11 @@ func main() {
 	// controllers
 	userController := controllers.InitUserController(store)
 	tenantController := controllers.InitTenantController()
+	UserApiController := api.InitUserApiController()
 
 	// Test
 	fmt.Println(tenantController)
 
-	// Test
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("home", fiber.Map{
 			"Title": "M-Holding",
@@ -63,6 +64,7 @@ func main() {
 	// API Routes
 	api := app.Group("/api")
 	api.Post("/login", userController.ApiLoginPosted)
+	api.Post("/register", UserApiController.RegisterApi)
 
 	app.Listen(":3000")
 }
