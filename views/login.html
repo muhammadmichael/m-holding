@@ -1,0 +1,19 @@
+{{template "partials/authheader" .}}
+
+<form method="POST" action="/login">
+	<div class="mb-3">
+		<label for="username" class="form-label">UserName</label>
+		<input type="text" class="form-control" name="username" id="username" placeholder="username">
+	</div>
+	<div class="mb-3">
+		<label for="password" class="form-label">Password</label>
+		<input type="password" class="form-control" name="password" id="password" placeholder="password">
+	</div>
+	<button type="submit" class="form-control btn btn-primary">Login</button>
+
+</form>
+<div class="text-center">
+	<a class="small" href="/register">Don't have account? Register</a>
+</div>
+
+{{template "partials/authfooter" .}}
