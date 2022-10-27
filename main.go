@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"rapid/m-holding/controllers"
+	"rapid/m-holding/api"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html"
@@ -27,10 +28,17 @@ func main() {
 	// controllers
 	userController := controllers.InitUserController()
 	tenantController := controllers.InitTenantController()
+	UserApiController := api.InitUserApiController()
 
 	fmt.Println(userController)
 	fmt.Println(tenantController)
 
+	//Module User Api
+	api:= app.Group("/api")
+	api.Post("/register", UserApiController.RegisterApi)
+	
+
+	//Module User
 	user := app.Group("/register")
 	user.Get("/", userController.Register)
 	user.Post("/tambah", userController.NewRegister)
