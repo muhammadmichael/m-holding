@@ -7,12 +7,9 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-<<<<<<< HEAD
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
-=======
->>>>>>> 36f0416 (DisablingUserXUpdateProfilePict)
 	"gorm.io/gorm"
 )
 
