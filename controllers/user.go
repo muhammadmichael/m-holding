@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"rapid/m-holding/database"
 	"rapid/m-holding/models"
 	"strconv"
@@ -208,36 +209,74 @@ func (controller *UserController) EditProfile(c *fiber.Ctx) error {
 
 // POST /profile/edit/:id
 func (controller *UserController) EditProfilePosted(c *fiber.Ctx) error {
-	var user models.User
-	var userEditForm models.User
+	// var user models.User
+	// var userEditForm models.User
 
-	params := c.AllParams() // "{"id": "1"}"
+	// params := c.AllParams() // "{"id": "1"}"
+	// intId, _ := strconv.Atoi(params["id"])
+	// user.Id = intId
+
+	// if err := c.BodyParser(&userEditForm); err != nil {
+	// 	return c.Redirect("/profile/edit/" + params["id"])
+	// }
+
+	// // Find the user
+	// err := models.FindUserById(controller.Db, &user, intId)
+	// if err != nil {
+	// 	return c.SendStatus(500) // http 500 internal server error
+	// }
+
+	// // Change from user's input
+	// user.Name = userEditForm.Name
+	// user.Email = userEditForm.Email
+	// user.Role = userEditForm.Role
+
+	// // save product
+	// errs := models.UpdateUser(controller.Db, &user)
+	// if errs != nil {
+	// 	return c.Redirect("/profile/edit/" + params["id"])
+	// }
+
+	// // if succeed
+	// return c.Redirect("/profile/" + params["id"])
+	var user models.User
+
+	params := c.AllParams() // "{"username": "admin"}"
 	intId, _ := strconv.Atoi(params["id"])
 	user.Id = intId
+	// username := params["username"]
 
-	if err := c.BodyParser(&userEditForm); err != nil {
-		return c.Redirect("/profile/edit/" + params["id"])
+	if err := c.BodyParser(&user); err != nil {
+		// send error message
+		return c.JSON(fiber.Map{
+			"message": "error",
+		})
 	}
 
-	// Find the user
-	err := models.FindUserById(controller.Db, &user, intId)
+	// Parse the multipart form:
+	if form, err := c.MultipartForm(); err == nil {
+		files := form.File["image"]
+		for _, file := range files {
+			fmt.Println(file.Filename, file.Size, file.Header["Content-Type"][0])
+			// Save files to disk:
+			user.Image = fmt.Sprintf("%s", file.Filename)
+			if err := c.SaveFile(file, fmt.Sprintf("./public/uploads/profilepict/%s"+file.Filename)); err != nil {
+				return err
+			}
+		}
+	}
+	// save user
+	err := models.UpdateUser(controller.Db, &user)
 	if err != nil {
-		return c.SendStatus(500) // http 500 internal server error
+		return c.JSON(fiber.Map{
+			"message": "error",
+		})
 	}
-
-	// Change from user's input
-	user.Name = userEditForm.Name
-	user.Email = userEditForm.Email
-	user.Role = userEditForm.Role
-
-	// save product
-	errs := models.UpdateUser(controller.Db, &user)
-	if errs != nil {
-		return c.Redirect("/profile/edit/" + params["id"])
-	}
-
 	// if succeed
-	return c.Redirect("/profile/" + params["id"])
+	return c.Render("profile", fiber.Map{
+		"Title": "Profile",
+		"User":  user,
+	})
 }
 
 // /logout

@@ -16,6 +16,7 @@ type User struct {
 	Email    string `form:"email" json: "email" validate:"required"`
 	Role     string `form:"role" json: "role" validate:"required"`
 	Password string `form:"password" json: "password" validate:"required"`
+	Disable  bool   `gorm:"default:false"`
 	TenantID uint
 }
 
@@ -50,6 +51,13 @@ func FindUserById(db *gorm.DB, user *User, id int) (err error) {
 
 func UpdateUser(db *gorm.DB, user *User) (err error) {
 	db.Save(user)
+
+	return nil
+}
+
+// update user by username
+func UpdateUserByUsername(db *gorm.DB, user *User, username string) (err error) {
+	db.Where("username=?", username).Save(user)
 
 	return nil
 }

@@ -7,6 +7,19 @@
             <h5 class="card-title">
                 {{.User.Name}}
             </h5>
+            <div class="profile-pic">
+                <!-- <label class="-label" for="file">
+                  <span class="glyphicon glyphicon-camera"></span>
+                  <span>Change Image</span>
+                </label> -->
+                <!-- <input id="file" type="file" onchange="loadFile(event)"/> -->
+                {{if .User.Image}}
+                <img src="/public/uploads/profilepict/{{.User.Image}}" alt="Profile Picture" style="width:75px;">
+                {{else }}
+                <img src="/public/uploads/profilepict/default.jpg" alt="Profile Picture default"style="width:75px;">
+                {{end}}
+            </div>
+            
             <p class="card-text">Username: {{.User.Username}}</p>
             <p class="card-text">Email: {{.User.Email}}</p>
             <p class="card-text">Role: {{.User.Role}}</p>
