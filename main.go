@@ -38,7 +38,7 @@ func main() {
 	// controllers
 	userController := controllers.InitUserController(store)
 	tenantController := controllers.InitTenantController()
-	UserApiController := api.InitUserApiController()
+	userApiController := api.InitUserApiController()
 
 	// Test
 	fmt.Println(tenantController)
@@ -63,8 +63,8 @@ func main() {
 
 	// API Routes
 	api := app.Group("/api")
-	api.Post("/login", userController.ApiLoginPosted)
-	api.Post("/register", UserApiController.RegisterApi)
+	api.Post("/login", userApiController.ApiLoginPosted)
+	api.Post("/register", userApiController.RegisterApi)
 
 	app.Listen(":3000")
 }
