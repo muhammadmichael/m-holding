@@ -367,7 +367,7 @@ func (u *UserController) DisableTheUser(c *fiber.Ctx) (err error) {
 	if err != nil {
 		return err
 	}
-	return c.Redirect("/login")
+	return c.Redirect("/profile/" + strconv.Itoa(id))
 }
 
 // enable user
@@ -377,5 +377,5 @@ func (u *UserController) EnableTheUser(c *fiber.Ctx) (err error) {
 	if err != nil {
 		return err
 	}
-	return c.Redirect("/login")
+	return c.Redirect("/profile/" + strconv.Itoa(id))
 }
