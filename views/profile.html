@@ -33,6 +33,12 @@
     <a href="/" class="btn btn-primary">Back</a>
     &nbsp;
     <a href="/profile/edit/{{.User.Id}}" class="btn btn-outline-primary">Edit Profile</a>
+    &nbsp;
+    <a href="/profile/delete/{{.User.Id}}" class="btn btn-outline-danger">Delete User</a>
+    &nbsp;
+    <a href="/profile/disable/{{.User.Id}}" class="btn btn-outline-warning">Disable this User</a>
+    &nbsp;
+    <a href="/profile/enable/{{.User.Id}}" class="btn btn-outline-warning">Enable this User</a>
 </div>
 
 {{template "partials/footer" .}}

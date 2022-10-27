@@ -209,36 +209,6 @@ func (controller *UserController) EditProfile(c *fiber.Ctx) error {
 
 // POST /profile/edit/:id
 func (controller *UserController) EditProfilePosted(c *fiber.Ctx) error {
-	// var user models.User
-	// var userEditForm models.User
-
-	// params := c.AllParams() // "{"id": "1"}"
-	// intId, _ := strconv.Atoi(params["id"])
-	// user.Id = intId
-
-	// if err := c.BodyParser(&userEditForm); err != nil {
-	// 	return c.Redirect("/profile/edit/" + params["id"])
-	// }
-
-	// // Find the user
-	// err := models.FindUserById(controller.Db, &user, intId)
-	// if err != nil {
-	// 	return c.SendStatus(500) // http 500 internal server error
-	// }
-
-	// // Change from user's input
-	// user.Name = userEditForm.Name
-	// user.Email = userEditForm.Email
-	// user.Role = userEditForm.Role
-
-	// // save product
-	// errs := models.UpdateUser(controller.Db, &user)
-	// if errs != nil {
-	// 	return c.Redirect("/profile/edit/" + params["id"])
-	// }
-
-	// // if succeed
-	// return c.Redirect("/profile/" + params["id"])
 	var user models.User
 
 	params := c.AllParams() // "{"username": "admin"}"
@@ -252,31 +222,75 @@ func (controller *UserController) EditProfilePosted(c *fiber.Ctx) error {
 			"message": "error",
 		})
 	}
-
+	Name := ""
+	Email := ""
+	Role := ""
+	Username := ""
+	// Image := ""
 	// Parse the multipart form:
 	if form, err := c.MultipartForm(); err == nil {
+		// contains non-file fields
+		// fill user value with form value
+		Name = form.Value["name"][0]
+		Email = form.Value["email"][0]
+		Role = form.Value["role"][0]
+		Username = form.Value["username"][0]
 		files := form.File["image"]
 		for _, file := range files {
 			fmt.Println(file.Filename, file.Size, file.Header["Content-Type"][0])
 			// Save files to disk:
 			user.Image = fmt.Sprintf("%s", file.Filename)
-			if err := c.SaveFile(file, fmt.Sprintf("./public/uploads/profilepict/%s"+file.Filename)); err != nil {
+
+			if err := c.SaveFile(file, "./public/uploads/profilepict/"+file.Filename); err != nil {
 				return err
 			}
+			//find user by id
+			err := models.FindUserById(controller.Db, &user, intId)
+			if err != nil {
+				return c.SendStatus(500) // http 500 internal server error
+			}
+			user.Name = Name
+			user.Email = Email
+			user.Role = Role
+			user.Username = Username
+			user.Password = user.Password
+			user.Image = fmt.Sprintf("%s", file.Filename)
+			//bcrypt password
+
+			// save user
+			errs := models.UpdateUser(controller.Db, &user)
+			if errs != nil {
+				return c.JSON(fiber.Map{
+					"message": "error",
+				})
+			}
 		}
-	}
-	// save user
-	err := models.UpdateUser(controller.Db, &user)
-	if err != nil {
-		return c.JSON(fiber.Map{
-			"message": "error",
-		})
 	}
 	// if succeed
 	return c.Render("profile", fiber.Map{
 		"Title": "Profile",
 		"User":  user,
 	})
+}
+
+// delete user
+func (controller *UserController) DeleteUser(c *fiber.Ctx) error {
+	params := c.AllParams() // "{"id": "1"}"
+
+	intId, _ := strconv.Atoi(params["id"])
+
+	var user models.User
+	err := models.FindUserById(controller.Db, &user, intId)
+	if err != nil {
+		return c.SendStatus(500) // http 500 internal server error
+	}
+
+	errs := models.DeleteUser(controller.Db, &user, intId)
+	if errs != nil {
+		return c.SendStatus(500) // http 500 internal server error
+	}
+
+	return c.Redirect("/users")
 }
 
 // /logout
@@ -346,21 +360,22 @@ func (controller *UserController) UpdateUserImage(c *fiber.Ctx) error {
 }
 
 // disable user
-func (u *UserController) DisableUser(id uint) (err error) {
-
+func (u *UserController) DisableTheUser(c *fiber.Ctx) (err error) {
+	id, _ := strconv.Atoi(c.Params("id"))
+	fmt.Println(id)
 	err = u.Db.Model(&models.User{}).Where("id=?", id).Update("disable", true).Error //update disable
 	if err != nil {
 		return err
 	}
-	return nil
+	return c.Redirect("/user")
 }
 
 // enable user
-func (u *UserController) EnableUser(id uint) (err error) {
-
+func (u *UserController) EnableTheUser(c *fiber.Ctx) (err error) {
+	id, _ := strconv.Atoi(c.Params("id"))
 	err = u.Db.Model(&models.User{}).Where("id=?", id).Update("disable", false).Error //update disable
 	if err != nil {
 		return err
 	}
-	return nil
+	return c.Redirect("/user")
 }

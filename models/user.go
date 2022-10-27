@@ -61,3 +61,9 @@ func UpdateUserByUsername(db *gorm.DB, user *User, username string) (err error) 
 
 	return nil
 }
+
+// delete user
+func DeleteUser(db *gorm.DB, user *User, id int) (err error) {
+	db.Where("id=?", id).Delete(user)
+	return nil
+}
