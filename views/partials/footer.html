@@ -1,16 +1,50 @@
-<!-- konten utama -->
-</div>
-</main>
-
-<footer class="footer mt-auto py-3 bg-light">
+      <!-- Konten Utama -->
+    </div>
+  </main>
+  
+  <!--Footer-->
+  <footer>
     <div class="container">
       <span class="text-muted">&copy; 2022. Kelompok 1</span>
     </div>
   </footer>
+  <!--Footer-->
   
+  <!-- PRISM -->
+  <script src="/js/new-prism.js"></script>
+  <!-- MDB SNIPPET -->
+  <script src="/js/mdbsnippet.min.js"></script>
+  <!-- MDB -->
+  <script src="/js/mdb.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/revenuedata.js"></script>
+  <script src="/js/viewad.js"></script>
   
       <script src="../../public/js/bootstrap.bundle.min.js"></script>
   
-        
-    </body>
+    let innerWidth = null;
+  
+    const setMode = (e) => {
+      // Check necessary for Android devices
+      if (window.innerWidth === innerWidth) {
+        return;
+      }
+  
+      innerWidth = window.innerWidth;
+  
+      if (window.innerWidth < 1400) {
+        instance.changeMode("over");
+        instance.hide();
+      } else {
+        instance.changeMode("side");
+        instance.show();
+      }
+    };
+  
+    setMode();
+  
+    // Event listeners
+    window.addEventListener("resize", setMode);
+  </script>
+  </body>
   </html>

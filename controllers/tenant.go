@@ -22,3 +22,4 @@ func InitTenantController() *TenantController {
 
 	return &TenantController{Db: db}
 }
+

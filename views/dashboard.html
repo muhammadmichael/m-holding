@@ -1,0 +1,113 @@
+{{template "partials/header" .}}
+<div class="my-5 row">
+    <div class="col">
+        <div class="shadow p-3 bg-dark text-white rounded cards">
+            <div class="row">
+                <div class="col-8">
+                    <h4>$ 1000</h4>
+                    <h6>Total Revenue</h6>
+                </div>
+                <div class="col-4 d-flex align-items-center justify-content-end">
+                    <i class="fa fa-coins fa-2x"></i>
+                </div>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>    
+    <div class="col">
+        <div class="shadow p-3 bg-white text-dark rounded cards">
+            <div class="row">
+                <div class="col-8">
+                    <h4>500 Views</h4>
+                    <h6>Total Viewers</h6>
+                </div>
+                <div class="col-4 d-flex align-items-center justify-content-end">
+                    <i class="fa fa-video fa-2x"></i>
+                </div>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>   
+    <div class="col">
+        <div class="shadow p-3 bg-white text-dark rounded cards">
+            <div class="row">
+                <div class="col-8">
+                    <h4>50 Views</h4>
+                    <h6>Total Viewers Today</h6>
+                </div>
+                <div class="col-4 d-flex align-items-center justify-content-end">
+                    <i class="fa fa-film fa-2x"></i>
+                </div>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>   
+    <div class="col">
+        <div class="shadow p-3 bg-white text-dark rounded cards">
+            <div class="row">
+                <div class="col-9">
+                    <h4>$ 100</h4>
+                    <h6>Total Revenue Today</h6>
+                </div>
+                <div class="col-3 d-flex align-items-center justify-content-end">
+                    <i class="fa fa-dollar-sign fa-2x"></i>
+                </div>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>   
+</div>
+
+<div class="my-5 row">
+    <div class="col">
+        <div class="col shadow p-3 bg-white text-dark rounded cards">
+            <h4>Weekly Revenue</h4>
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+    <div class="col">
+        <div class="col shadow p-3 bg-white text-dark rounded cards">
+            <h4>Weekly Views</h4>
+            <canvas id="horizontalBar"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="my-5 row">
+    <div class="col">
+        <div class="shadow p-3 bg-white text-dark rounded">
+            <h4>Ad List</h4>
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Id Iklan</th>
+                    <th scope="col">Nama Iklan</th>
+                    <th scope="col">Viewers</th>
+                    <th scope="col">Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {{range .Products}}
+                    <tr>
+                        <th scope="row">{{.Id}}</th>
+                        <td>{{.Name}}</td>
+                        <td>{{.Viewer}} Views</td>
+                        <td>$ {{.Revenue}}</td>
+                    </tr>
+                  {{end}}
+                  
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{{template "partials/footer" .}}
