@@ -63,5 +63,13 @@ func main() {
 	api.Post("/login", userApiController.ApiLoginPosted)
 	api.Post("/register", userApiController.RegisterApi)
 
+	usercont := app.Group("/user")
+	usercont.Get("/", userController.DataUser)
+	usercont.Get("/enable/:id", userController.UserDisable)
+	usercont.Get("/disable/:id", userController.UserEnable)
+	usercont.Get("/deleteuser/:id", userController.DeleteUser)
+	usercont.Get("/update/:id", userController.UpdateUserForm)
+	usercont.Post("/edituser/:id", userController.EditUser)
+
 	app.Listen(":3000")
 }

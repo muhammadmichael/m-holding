@@ -1,0 +1,113 @@
+{{template "partials/header" .}}
+
+<div class="container mt-4 position-absolute">
+    <div class="card mt-6">
+        <div class="card-header ">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="float-start">
+                        <h5> Data User</h5>
+                    </div>
+
+                </div>
+                
+            </div>
+        </div>
+
+
+
+        <div class="card-body mt-4">
+            
+            <div class="row mt-4">
+                <div class="col-lg-12">
+
+                    <div>
+                        <table class="table table-hover table-bordered table-striped" id="table1" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Activate</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{range .User}}
+                                <tr>
+                                    <th scope="row">{{.Id}}</th>
+                                    <td>{{.Name}}</td>
+                                    <td>{{.Username}}</td>
+                                    <td>{{.Email}}</td>
+                                    <td>{{.Role}}</td>
+                                    <td>
+                                         <span class="badge bg-success">{{ .Disable }}</span>
+
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                           
+                                            <a href="/user/enable/{{.Id }}" type="button" class="btn btn-outline-success">Enable</a>
+                                            <a href="/user/disable/{{.Id }}" type="button" class="btn btn-outline-danger">Disable</a>
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <!-- <a href="products/productdetail?id={{.Id}}" class="btn btn-outline-info">
+                                        Detail</a>
+                                    &nbsp;
+                                    <a href="products/detail/{{.Id}}" class="btn btn-outline-info">
+                                        Detail 2
+                                    </a>
+                                    <a href="products/detail/{{.Id}}" class="btn btn-outline-info">
+                                        Add Cart
+                                    </a> -->
+                                       
+                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                            <a href="/user/update/{{.Id}}" type="button" class="btn btn-outline-warning"><i
+                                                    class="fas fa-eye"></i></a>
+                                            <a href="/user/deleteuser/{{.Id}}" type="button" class="btn btn-outline-danger">
+                                                <i class="fas fa-trash"></i></i></button></a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                {{end}}
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="row">
+        <div class="col-lg-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Data Siswa</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Input Data Siswa</li>
+                </ol>
+            </nav>
+        </div>
+    </div> -->
+
+
+
+
+
+</div>
+
+{{template "partials/footer" .}}
