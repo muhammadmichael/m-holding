@@ -43,11 +43,8 @@ func main() {
 	// Test
 	fmt.Println(tenantController)
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("home", fiber.Map{
-			"Title": "M-Holding",
-		})
-	})
+	// Home
+	app.Get("/", userController.GetHome)
 
 	// Auth Routes (Register and Login)
 	app.Get("/register", userController.Register)

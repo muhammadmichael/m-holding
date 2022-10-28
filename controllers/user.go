@@ -93,7 +93,7 @@ func (controller *UserController) LoginPosted(c *fiber.Ctx) error {
 	compare := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(myform.Password))
 	if compare == nil { // compare == nil artinya hasil compare di atas true
 		sess.Set("username", user.Username)
-		sess.Set("userId", user.ID)
+		sess.Set("userId", user.Id)
 		sess.Save()
 
 		return c.Redirect("/")
@@ -196,5 +196,20 @@ func (controller *UserController) Logout(c *fiber.Ctx) error {
 	sess.Destroy()
 	return c.Render("login", fiber.Map{
 		"Title": "Login",
+	})
+}
+
+// GET /
+// Home
+func (controller *UserController) GetHome(c *fiber.Ctx) error {
+	sess, err := controller.store.Get(c)
+	if err != nil {
+		panic(err)
+	}
+	val := sess.Get("userId")
+
+	return c.Render("home", fiber.Map{
+		"Title":  "M-Holding",
+		"UserId": val,
 	})
 }
