@@ -78,7 +78,7 @@
   <!-- Fixed navbar -->
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">M-Holding</a>
+      <a class="navbar-brand" href="/">M-Holding</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -87,12 +87,21 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
+          {{if .UserId}}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/profile/{{.UserId}}">Profile</a>
+          </li>
+          {{end}}
+          {{if not .UserId}}
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/login">Login</a>
           </li>
+          {{end}}
+          {{if .UserId}}
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
           </li>
+          {{end}}
         </ul>
         <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
