@@ -1,0 +1,28 @@
+{{template "partials/header" .}}
+
+<h1>Daftar Produk</h1>
+<br>
+<a href="/products/create" class="btn btn-primary">Tambah Produk</a>
+<div>
+	<table class="table table-striped">
+		<thead>
+		  <tr>
+			<th scope="col">id</th>
+			<th scope="col">Name</th>
+			<th scope="col">Users</th>
+		  </tr>
+		</thead>
+		<tbody>
+			{{range .Tenants}}
+			<tr>
+				<th scope="row">{{.Id}}</th>
+				<td>{{.Name}}</td>
+				<td>{{.User}}</td>
+			</tr>
+		  {{end}}
+		  
+		</tbody>
+	  </table>
+</div>
+
+{{template "partials/footer" .}}

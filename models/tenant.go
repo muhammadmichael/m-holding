@@ -11,7 +11,8 @@ type Tenant struct {
 	gorm.Model
 	Id    int    `form:"id" json:"id" validate:"required"`
 	Name  string `form:"name" json:"name" validate:"required"`
-	Users []User
+	// e.g. : ali, ili, uli, oli 
+	Users string `forn:"user" json:"name"`
 }
 
 func ReadAllTenant(db *gorm.DB, tenant *[]Tenant)(err error){
@@ -30,10 +31,10 @@ func FindTenantById(db *gorm.DB, tenant *Tenant, id int) (err error) {
 	return nil
 }
 
-func UpdateTenant(db *gorm.DB, tenant *Tenant) (err error) {
-	db.Save(tenant)
-	return nil
-}
+// func UpdateTenant(db *gorm.DB, tenant *Tenant) (err error) {
+// 	db.Save(tenant)
+// 	return nil
+// }
 
 func FindTenantByName(db *gorm.DB, tenant *Tenant, name string) (err error) {
 	err = db.Where("name=?", name).First(tenant).Error
@@ -50,16 +51,13 @@ func CreateTenant(db *gorm.DB, newTenant *Tenant)(err error){
 	}
 	return nil
 }
-// komen
-// func Registrasi(db *gorm.DB, newTenant *Tenant) (err error) {
-// 	plPassword := newTenant.Password
-// 	bytes, _ := bcrypt.GenerateFromPassword([]byte(plPassword), 10)
-// 	sHash := string(bytes)
-// 	fmt.Println("Hash password: ", sHash)
-// 	newTenant.Password = sHash
-// 	err = db.Create(newTenant).Error
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+//menggunakan update
+func AddUserTenant(db *gorm.DB, tenant *Tenant) (err error) {
+	db.Save(tenant)
+	return nil
+}
+
+func DeleteTenantById(db *gorm.DB, tenant *Tenant ,id int)(err error){
+	db.Where("id=?",id).Delete(tenant)
+	return nil
+}

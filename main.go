@@ -1,11 +1,12 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 	"rapid/m-holding/controllers"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html"
+
 )
 
 func main() {
@@ -25,17 +26,20 @@ func main() {
 	})
 
 	// controllers
-	userController := controllers.InitUserController()
+	// userController := controllers.InitUserController()
 	tenantController := controllers.InitTenantController()
 
-	fmt.Println(userController)
-	fmt.Println(tenantController)
+	// fmt.Println(userController)
+	// fmt.Println(tenantController)
 
 	app.Get("/hello", func(c *fiber.Ctx) error {
 		return c.Render("home", fiber.Map{
 			"Title": "M-Holding",
 		})
 	})
+
+	tnt := app.Group("/tenants")
+	tnt.Get("/",tenantController.AllTenant)
 
 	app.Listen(":3000")
 }
