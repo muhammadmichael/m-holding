@@ -56,3 +56,18 @@ func UpdateUser(db *gorm.DB, user *User) (err error) {
 
 	return nil
 }
+func ReadUser(db *gorm.DB, user *[]User) (err error) {
+	err = db.Find(user).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteById(db *gorm.DB, user *User, id int)(err error) {
+	db.Where("id=?", id).Delete(user)
+	
+	return nil
+}
+
+

@@ -213,3 +213,97 @@ func (controller *UserController) GetHome(c *fiber.Ctx) error {
 		"UserId": val,
 	})
 }
+
+func (controller *UserController) DataUser(c *fiber.Ctx) error {
+	var user []models.User
+
+	err := models.ReadUser(controller.Db, &user)
+	if err != nil {
+		return c.SendStatus(500) // http 500 internal server error
+	}
+	return c.Render("indexuser", fiber.Map{
+		"Title": "Data User",
+		"User": user,
+	})
+}
+
+func (controller *UserController) UserDisable(c *fiber.Ctx) (err error) {
+	id, _ := strconv.Atoi(c.Params("id"))
+	
+	err = controller.Db.Model(&models.User{}).Where("id=?", id).Update("disable", true).Error //update disable
+	if err != nil {
+		return err
+	}
+	return c.Redirect("/user")
+}
+// enable user
+func (controller *UserController) UserEnable(c *fiber.Ctx) (err error) {
+	id, _ := strconv.Atoi(c.Params("id"))
+	err = controller.Db.Model(&models.User{}).Where("id=?", id).Update("disable", false).Error //update disable
+	if err != nil {
+		return err
+	}
+	return c.Redirect("/user")
+}
+
+func (controller *UserController) DeleteUser(c *fiber.Ctx) error {
+	id := c.Params("id")
+	idn,_ := strconv.Atoi(id)
+
+	var user models.User
+	models.DeleteById(controller.Db, &user, idn)
+
+	//return c.JSON(user)	
+	return c.Redirect("/user")
+}
+
+
+
+// GET FORM REGISTRASI
+func (controller *UserController) UpdateUserForm(c *fiber.Ctx) error {
+
+	id := c.Params("id")
+	idn,_ := strconv.Atoi(id)
+
+	var user models.User
+	err := models.FindUserById(controller.Db, &user, idn)
+	if err != nil {
+		return c.SendStatus(500) // http 500 internal server error
+	}
+	return c.Render("Update", fiber.Map{
+		"Title": "Update User",
+		"User" :user,
+	})
+}
+
+
+
+func (controller *UserController) EditUser(c *fiber.Ctx) error {
+	id := c.Params("id")
+	idn,_ := strconv.Atoi(id)
+	
+
+	var user models.User
+	err := models.FindUserById(controller.Db, &user, idn)
+	if err!=nil {
+		return c.SendStatus(500) // http 500 internal server error
+	}
+	
+	var updateUser models.User
+
+	if err := c.BodyParser(&updateUser); err != nil {
+		return c.SendStatus(400)
+	}
+	user.Name = updateUser.Name
+	user.Username = updateUser.Username
+	user.Email = updateUser.Email
+	user.Role = updateUser.Role
+	user.KategoriUser = updateUser.KategoriUser
+	
+	
+
+	// save suer
+	models.UpdateUser(controller.Db, &user)
+	
+	return c.Redirect("/user")
+}
