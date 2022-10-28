@@ -3,7 +3,10 @@
 <form method="POST" action="/register/tambah">
 	<div class="mb-3">
 		<label for="name" class="form-label">Name</label>
-		<input type="text" class="form-control" name="name" id="name" placeholder="Your Name" requ>
+		<input type="text" class="form-control" name="name" id="name" placeholder="Your Name" required>
+		<div class="invalid-feedback">
+			Please provide a valid Name.
+		  </div>
 	</div>
 	<div class="mb-3">
 		<label for="username" class="form-label">User Name</label>
@@ -22,9 +25,18 @@
 		</select>
 	</div>
 	<div class="mb-3">
+		<label for="kategoriuser" class="form-label">Categori User</label>
+		<select class="form-select" name="kategoriuser" aria-label="Default select example">
+			<option>--Select Your Categori--</option>
+			<option value="video">M-Video</option>
+			<option value="iklan">M-Iklan</option>
+		</select>
+	</div>
+	<div class="mb-3">
 		<label for="password" class="form-label">Password</label>
 		<input type="password" class="form-control" name="password" id="password" placeholder="Your Password" required>
 	</div>
+	
 	<button type="submit" class="form-control btn btn-primary">Register</button>
 
 </form>
