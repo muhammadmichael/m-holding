@@ -43,7 +43,7 @@ func (controller *UserController) NewRegister(c *fiber.Ctx) error {
 	var user models.User
 
 	if err := c.BodyParser(&registrasi); err != nil {
-		return c.Redirect("/registrasi")
+		return c.Redirect("/auth")
 	}
 
 	// Cek apakah username sudah digunakan
@@ -57,7 +57,7 @@ func (controller *UserController) NewRegister(c *fiber.Ctx) error {
 	// save registrasi
 	err := models.Registrasi(controller.Db, &registrasi)
 	if err != nil {
-		return c.Redirect("/registrasi")
+		return c.Redirect("/auth")
 	}
 	// if succeed
 	return c.Redirect("/login")
