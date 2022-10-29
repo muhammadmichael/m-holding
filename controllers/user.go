@@ -181,6 +181,7 @@ func (controller *UserController) EditProfilePosted(c *fiber.Ctx) error {
 		Email = form.Value["email"][0]
 		Role = form.Value["role"][0]
 		Username = form.Value["username"][0]
+
 		files := form.File["image"]
 		for _, file := range files {
 			fmt.Println(file.Filename, file.Size, file.Header["Content-Type"][0])
@@ -200,6 +201,7 @@ func (controller *UserController) EditProfilePosted(c *fiber.Ctx) error {
 			user.Role = Role
 			user.Username = Username
 			user.Password = user.Password
+			user.KategoriUser = user.KategoriUser
 			user.Image = fmt.Sprintf("%s", file.Filename)
 			//bcrypt password
 

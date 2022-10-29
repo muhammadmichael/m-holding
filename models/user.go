@@ -17,8 +17,9 @@ type User struct {
 	Role     string `form:"role" json: "role" validate:"required"`
 	Password string `form:"password" json: "password" validate:"required"`
 	//default false (Active)
-	Disable  bool `gorm:"default:0"`
-	TenantID uint
+	Disable      bool   `gorm:"default:0"`
+	KategoriUser string `form:"kategori_user" json: "kategori_user" validate:"required"`
+	TenantID     uint
 }
 
 func Registrasi(db *gorm.DB, newUser *User) (err error) {
