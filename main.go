@@ -44,6 +44,7 @@ func main() {
 	// controllers
 	userController := controllers.InitUserController(store)
 	tenantController := controllers.InitTenantController()
+	dashboardController := controllers.InitDashboardController()
 	userApiController := api.InitUserApiController()
 
 	// Home
@@ -97,6 +98,9 @@ func main() {
 
 	tnt := app.Group("/tenants")
 	tnt.Get("/", tenantController.AllTenant)
+
+	dashboard := app.Group("dashboard")
+	dashboard.Get("/", dashboardController.Dashboard)
 
 	app.Listen(":3000")
 }
