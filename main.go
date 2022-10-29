@@ -61,6 +61,10 @@ func main() {
 	profile.Get("/:id", userController.ViewProfile)
 	profile.Get("/edit/:id", userController.EditProfile)
 	profile.Post("/edit/:id", userController.EditProfilePosted)
+	profile.Delete("/delete/:id", userController.DeleteUser)
+	//disable user
+	profile.Get("/disable/:id", userController.DisableTheUser)
+	profile.Get("/enable/:id", userController.EnableTheUser)
 
 	// API Routes
 	api := app.Group("/api")
