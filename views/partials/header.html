@@ -102,6 +102,11 @@
               <a class="nav-link active" aria-current="page" href="/profile/{{.UserId}}">Profile</a>
             </li>
             {{end}}
+            {{if .UserId}}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/revenue">Revenue</a>
+            </li>
+            {{end}}
             {{if not .UserId}}
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/login">Login</a>
