@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"rapid/m-holding/api"
 	"rapid/m-holding/controllers"
 
@@ -46,9 +45,6 @@ func main() {
 	userController := controllers.InitUserController(store)
 	tenantController := controllers.InitTenantController()
 	userApiController := api.InitUserApiController()
-
-	// Test
-	fmt.Println(tenantController)
 
 	// Home
 	app.Get("/", userController.GetHome)
@@ -98,6 +94,9 @@ func main() {
 			"Products": products,
 		})
 	})
+
+	tnt := app.Group("/tenants")
+	tnt.Get("/", tenantController.AllTenant)
 
 	app.Listen(":3000")
 }
