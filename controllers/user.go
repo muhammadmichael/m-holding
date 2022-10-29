@@ -220,24 +220,24 @@ func (controller *UserController) EditProfilePosted(c *fiber.Ctx) error {
 }
 
 // delete user
-func (controller *UserController) DeleteUser(c *fiber.Ctx) error {
-	params := c.AllParams() // "{"id": "1"}"
+// func (controller *UserController) DeleteUser(c *fiber.Ctx) error {
+// 	params := c.AllParams() // "{"id": "1"}"
 
-	intId, _ := strconv.Atoi(params["id"])
+// 	intId, _ := strconv.Atoi(params["id"])
 
-	var user models.User
-	err := models.FindUserById(controller.Db, &user, intId)
-	if err != nil {
-		return c.SendStatus(500) // http 500 internal server error
-	}
+// 	var user models.User
+// 	err := models.FindUserById(controller.Db, &user, intId)
+// 	if err != nil {
+// 		return c.SendStatus(500) // http 500 internal server error
+// 	}
 
-	errs := models.DeleteUser(controller.Db, &user, intId)
-	if errs != nil {
-		return c.SendStatus(500) // http 500 internal server error
-	}
+// 	errs := models.DeleteUser(controller.Db, &user, intId)
+// 	if errs != nil {
+// 		return c.SendStatus(500) // http 500 internal server error
+// 	}
 
-	return c.Redirect("/users")
-}
+// 	return c.Redirect("/users")
+// }
 
 // /logout
 func (controller *UserController) Logout(c *fiber.Ctx) error {
