@@ -97,9 +97,24 @@
               <a class="nav-link active" aria-current="page" href="/user">Data User</a>
             </li>
             {{end}}
+            {{if not .UserId}}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/tenants">Data Tenants</a>
+            </li>
+            {{end}}
+            {{if not .UserId}}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
+            </li>
+            {{end}}
             {{if .UserId}}
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/profile/{{.UserId}}">Profile</a>
+            </li>
+            {{end}}
+            {{if .UserId}}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/revenue">Revenue</a>
             </li>
             {{end}}
             {{if not .UserId}}

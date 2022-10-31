@@ -5,6 +5,10 @@
     <br>
 
 <form method="POST" action="/profile/edit/{{.User.Id}}">
+	<div class="form-group">
+		<label for="image">Profile Picture</label> <br>
+		<input type="file" class="form-control-file" id="image" name="image">
+	</div>
 	<div class="mb-3">
 		<label for="name" class="form-label">Name</label>
 		<input type="text" class="form-control" value="{{.User.Name}}" name="name" id="name" placeholder="Your Name" required>
@@ -12,6 +16,10 @@
 	<div class="mb-3">
 		<label for="email" class="form-label">Email</label>
 		<input type="email" class="form-control" value="{{.User.Email}}" name="email" id="email" placeholder="Your User Name" required>
+	</div>
+	<div class="mb-3">
+		<label for="username" class="form-label">Username</label>
+		<input type="text" class="form-control" value="{{.User.Username}}" name="username" id="username" placeholder="Your Name" required>
 	</div>
 	<div class="mb-3">
 		<label for="exampleInputPassword1" class="form-label">Role</label>

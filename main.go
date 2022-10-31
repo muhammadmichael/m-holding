@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"rapid/m-holding/api"
 	"rapid/m-holding/controllers"
 
@@ -9,6 +8,13 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/gofiber/template/html"
 )
+
+type Product struct {
+	Id      int
+	Name    string
+	Viewer  int
+	Revenue float32
+}
 
 func main() {
 	// session
@@ -38,10 +44,8 @@ func main() {
 	// controllers
 	userController := controllers.InitUserController(store)
 	tenantController := controllers.InitTenantController()
+	dashboardController := controllers.InitDashboardController()
 	userApiController := api.InitUserApiController()
-
-	// Test
-	fmt.Println(tenantController)
 
 	// Home
 	app.Get("/", userController.GetHome)
@@ -57,6 +61,10 @@ func main() {
 	profile.Get("/:id", userController.ViewProfile)
 	profile.Get("/edit/:id", userController.EditProfile)
 	profile.Post("/edit/:id", userController.EditProfilePosted)
+	profile.Delete("/delete/:id", userController.DeleteUser)
+	//disable user
+	profile.Get("/disable/:id", userController.UserDisable)
+	profile.Get("/enable/:id", userController.UserEnable)
 
 	// API Routes
 	api := app.Group("/api")
@@ -70,6 +78,33 @@ func main() {
 	usercont.Get("/deleteuser/:id", userController.DeleteUser)
 	usercont.Get("/update/:id", userController.UpdateUserForm)
 	usercont.Post("/edituser/:id", userController.EditUser)
+
+	app.Get("/test", func(c *fiber.Ctx) error {
+		return c.Render("test", fiber.Map{
+			"Title": "Revenue",
+		})
+	})
+
+	app.Get("/revenue", func(c *fiber.Ctx) error {
+		var products = []*Product{
+			{Id: 1, Name: "Iklan 1", Viewer: 10, Revenue: 20},
+			{Id: 2, Name: "Iklan 2", Viewer: 20, Revenue: 40},
+			{Id: 3, Name: "Iklan 3", Viewer: 30, Revenue: 60},
+			{Id: 4, Name: "Iklan 4", Viewer: 40, Revenue: 80},
+			{Id: 5, Name: "Iklan 5", Viewer: 50, Revenue: 100},
+		}
+
+		return c.Render("revenue", fiber.Map{
+			"Title":    "Detail Revenue",
+			"Products": products,
+		})
+	})
+
+	tnt := app.Group("/tenants")
+	tnt.Get("/", tenantController.AllTenant)
+
+	dashboard := app.Group("dashboard")
+	dashboard.Get("/", dashboardController.Dashboard)
 
 	app.Listen(":3000")
 }
