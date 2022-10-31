@@ -43,8 +43,11 @@
                                     <td>{{.Username}}</td>
                                     <td>{{.Email}}</td>
                                     <td>{{.Role}}</td>
-                                    <td>
-                                         <span class="badge bg-success">{{ .Disable }}</span>
+                                    <td>{{if eq .Disable false  }}
+                                         <span class="badge bg-warning">Non Active</span>
+                                         {{ else }}
+                                         <span class="badge bg-success">Active</span>
+                                         {{ end }}
 
                                     </td>
                                     <td>
